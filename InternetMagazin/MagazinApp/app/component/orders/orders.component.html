@@ -1,0 +1,81 @@
+﻿
+<div class="row row-offcanvas row-offcanvas-right">
+
+    <h2>Корзина</h2>
+    <div class="col-xs-12 col-sm-9" *ngIf="orderIsNull">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Название</td>
+                    <td>Количество</td>
+                    <td>Цена</td>
+
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of orderItems">
+                    <td>{{p?.item.name}}</td>
+                    <td>{{p?.itemsCount}}</td>
+                    <td>{{p?.itemPrice}} Руб.</td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="button" value="Сохранить" (click)="save()" class="btn btn-success" />
+
+    </div>
+    <div class="col-xs-12 col-sm-9" *ngIf="!orderIsNull">
+        Корзина пуста
+    </div>
+
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+
+        <div class="list-group">
+            <a class="list-group-item" (click)="loadOrder()">Ваши заказы</a>
+        </div>
+        <div class="list-group" *ngFor="let p of orderUsers">
+            <a class="list-group-item" (click) ="openOrder(p)">{{p?.orderNumber}} {{p?.status}}</a>
+        </div>
+    </div><!--/span-->
+
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayOrder}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <div> Номер заказа {{orderUser.orderNumber}}</div>
+                    <div> Дата заказа {{orderUser.orderDate}}</div>
+                    <div> Дата выдачи {{orderUser.shipmentDate}}</div>
+                    <div> Статус {{orderUser.status}}</div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>Название</td>
+                                <td>Количество</td>
+                                <td>Цена</td>
+
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of orderUser.orderItems">
+                                <td>{{p?.items.name}}</td>
+                                <td>{{p?.itemsCount}}</td>
+                                <td>{{p?.itemPrice}} руб.</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <input type="button" value="Удалить заказ" (click)="deleteOrder()" class="btn btn-warning" />
+                    <input type="button" value="Отмена" (click)="closeOrder()" class="btn btn-warning" />
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

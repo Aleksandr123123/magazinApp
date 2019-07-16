@@ -1,0 +1,129 @@
+﻿
+<div class="row row-offcanvas row-offcanvas-right">
+
+    <h1>Товар</h1>
+    <div class="col-xs-12 col-sm-9">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td *ngIf="isManager">Id</td>
+                    <td>Название</td>
+                    <td>Код</td>
+                    <td>Цена</td>
+                    <td>Категория</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of items">
+                    <td *ngIf="isManager">{{p?.id}}</td>
+                    <td>{{p?.name}}</td>
+                    <td>{{p?.code}}</td>
+                    <td>{{p?.price}}</td>
+                    <td>{{p?.category}}</td>
+                    <td>
+                        <button *ngIf="isManager" class="btn btn-sm btn-primary" (click)="editItem(p)">Изменить</button>
+                        <button *ngIf="isManager" class="btn btn-sm btn-danger" (click)="deleteItem(p)">Удалить</button>
+                        <button *ngIf="isUser" class="btn btn-sm btn-danger" (click)="openAddOrderItem(p)">Добавить в корзину</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div><!--/span-->
+
+    <div *ngIf="isManager" class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <div class="list-group">
+            <a (click)="openCreate()" class="list-group-item">Добавить</a>
+
+        </div>
+    </div><!--/span-->
+
+</div><!--/row-->
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayCreate}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название</label>
+                        <input type="text" [(ngModel)]="item.name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Код</label>
+                        <input type="text" [(ngModel)]="item.code" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Цена</label>
+                        <input type="text" [(ngModel)]="item.price" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Категория</label>
+                        <input type="text" [(ngModel)]="item.category" class="form-control " />
+                    </div>
+                    <div>
+                        <input type="button" value="Сохранить" (click)="save()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeCreate()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayUpdate}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Название</label>
+                        <input type="text" [(ngModel)]="item.name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Код</label>
+                        <input type="text" [(ngModel)]="item.code" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Цена</label>
+                        <input type="text" [(ngModel)]="item.price" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Категория</label>
+                        <input type="text" [(ngModel)]="item.category" class="form-control " />
+                    </div>
+                    <div>
+                        <input type="button" value="Обновить" (click)="save()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeUpdate()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayAddOrderItem}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Добавление элемента заказа</h2>
+
+
+
+                    <div class="form-group">
+                        <label>Количество</label>
+                        <input type="text" [(ngModel)]="orderItem.itemsCount" class="form-control" />
+                    </div>
+
+
+                    <div>
+                        <input type="button" value="Добавить" (click)="saveOrderItem()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeAddOrderItem()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿<div class="app-component app-container">
+
+    <nav class="navbar navbar-default bg-primary ">
+        <div class="container-fluid">
+            <a ngPreserveWhitespaces class="navbar-brand" routerLink="/">
+                <span class="app-component appTitle">{{title}}</span>
+            </a>
+
+            <div *ngIf="isLoggedIn" class="app-component collapse navbar-collapse menuItemsContainer">
+                <ul class="nav navbar-nav">
+
+                    <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="nav-link" routerLink="/home">Товары</a>
+                    </li>
+                    <li *ngIf="isManager" class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="/users">Пользователи</a>
+                    </li>
+                    <li *ngIf="isUser" class="nav-item" routerLinkActive="active">
+                        <a class="nav-link" routerLink="/orders">Заказы</a>
+                    </li>
+
+                </ul>
+                <app-user></app-user>
+
+            </div>
+
+        </div>
+
+    </nav>
+    
+
+
+    <main class="app-component container">
+        <router-outlet></router-outlet>
+        <div class="app-component footer-height"></div>
+    </main>
+
+
+
+</div>

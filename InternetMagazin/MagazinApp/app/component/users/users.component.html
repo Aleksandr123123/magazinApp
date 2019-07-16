@@ -1,0 +1,273 @@
+﻿
+<div class="row row-offcanvas row-offcanvas-right">
+
+    <h1 *ngIf="isAll">Заказчики</h1>
+    <h1 *ngIf="isAll == false">Пользователи</h1>
+    <div class="col-xs-12 col-sm-9" *ngIf="isAll">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+
+                    <td>Id</td>
+                    <td>Имя</td>
+                    <td>Код</td>
+                    <td>Адрес</td>
+                    <td>Скидки</td>
+                    <td>userName</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of customers">
+                    <td>{{p?.id}}</td>
+                    <td>{{p?.name}}</td>
+                    <td>{{p?.code}}</td>
+                    <td>{{p?.address}}</td>
+                    <td>{{p?.discount}}</td>
+                    <td>{{p?.users.userName}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" (click)="editCustomers(p)">Изменить</button>
+                        <button class="btn btn-sm btn-danger" (click)="deleteCustomer(p)">Удалить</button>
+                        <button class="btn btn-sm btn-danger" (click)="openOrders(p)">Заказы</button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="col-xs-12 col-sm-9" *ngIf="isAll == false">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>username</td>
+                    <td>Роль</td>
+
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of users">
+
+                    <td>{{p?.id}}</td>
+                    <td>{{p?.userName}}</td>
+                    <td>{{p?.roles}}</td>
+
+                    <td>
+                        <button class="btn btn-sm btn-primary" (click)="editUsers(p)">Изменить</button>
+                        <button class="btn btn-sm btn-danger" (click)="deleteUser(p)">Удалить</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <div class="list-group">
+            <a (click)="getCustomers()" class="list-group-item">Заказчики</a>
+            <a (click)="getUsers()" class="list-group-item">Пользователи</a>
+            <a (click)="openCreate()" class="list-group-item">Добавить</a>
+
+
+        </div>
+    </div><!--/span-->
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayCreate}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Создание пользователя</h2>
+                    <div class="form-group">
+                        <label>Роль </label>
+                        <div class="btn-group btn-group-toggle">
+                            <label class=" btn-lg "><input type="radio" value="manager" [(ngModel)]="userok.roles" />Менеджер </label>
+                            <label class=" btn-lg ">  <input type="radio" value="user" [(ngModel)]="userok.roles" />Заказчик</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" *ngIf="userok.roles == 'user'">
+                        <label>Имя</label>
+                        <input type="text" [(ngModel)]="customer.name" class="form-control" />
+                    </div>
+                    <div class="form-group" *ngIf="userok.roles == 'user'">
+                        <label>Код</label>
+                        <input type="text" [(ngModel)]="customer.code" class="form-control" />
+                    </div>
+                    <div class="form-group" *ngIf="userok.roles == 'user'">
+                        <label>Адрес</label>
+                        <input type="text" [(ngModel)]="customer.address" class="form-control" />
+                    </div>
+                    <div class="form-group" *ngIf="userok.roles == 'user'">
+                        <label>Скидка</label>
+                        <input type="text" [(ngModel)]="customer.discount" class="form-control " />
+                    </div>
+
+                    <div class="form-group">
+                        <label>userName </label>
+                        <input type="text" [(ngModel)]="userok.userName" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="text" [(ngModel)]="userok.password" class="form-control" />
+                    </div>
+
+                    <div>
+                        <input type="button" *ngIf="userok.roles == 'user'" value="Сохранить" (click)="saveCustomer()" class="btn btn-success" />
+                        <input type="button" *ngIf="userok.roles == 'manager'" value="Сохранить" (click)="saveUser()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeCreate()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayUpdateUsers}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Обновить пользователя</h2>
+
+                    <div class="form-group">
+                        <label>userName </label>
+                        <input type="text" [(ngModel)]="userok.userName" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="text" [(ngModel)]="userok.password" class="form-control" />
+                    </div>
+
+                    <div>
+                        <input type="button" value="Сохранить" (click)="saveUser()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeUpdateUser()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayUpdateCustomers}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Изменить заказчика</h2>
+
+
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" [(ngModel)]="customer.name" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Код</label>
+                        <input type="text" [(ngModel)]="customer.code" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Адрес</label>
+                        <input type="text" [(ngModel)]="customer.address" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label>Скидка</label>
+                        <input type="text" [(ngModel)]="customer.discount" class="form-control " />
+                    </div>
+
+                    <div>
+                        <input type="button" value="Сохранить" (click)="saveCustomer()" class="btn btn-success" />
+                        <input type="button" value="Отмена" (click)="closeUpdateCustomer()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayOrders}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Заказ пользователя</h2>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>Номер</td>
+                                <td>Дата заказа</td>
+                                <td>Статус</td>
+
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of customer.orders">
+                                <td>{{p?.orderNumber}}</td>
+                                <td>{{p?.orderDate}}</td>
+                                <td>{{p?.status}}</td>
+                                <td>
+                                    <input type="button" value="Состав заказа" (click)="openOrdersItem(p)" class="btn btn-warning" />
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="button" value="Отмена" (click)="closeOrders()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayOrdersItem}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-body">
+                    <h2>Обновить заказ пользователя</h2>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>Название</td>
+                                <td>Количество</td>
+                                <td>Цена</td>
+
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of order.orderItems">
+                                <td>{{p?.items.name}}</td>
+                                <td>{{p?.itemsCount}}</td>
+                                <td>{{p?.itemPrice}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <label class=" btn-lg "><input type="radio" value="Выполняется" [(ngModel)]="order.status" />Выполняется </label>
+                        <label class=" btn-lg ">  <input type="radio" value="Выполнено" [(ngModel)]="order.status" />Выполнено</label>
+                        <div class="form-group" >
+                            <label>Дата выдачи </label>
+                            <input type="date" [(ngModel)]="order.shipmentDate" class="form-control" />
+                        </div>
+                        <input type="button" value="Поставить на выполнение" (click)="setOrderStatus()" class="btn btn-success" />
+
+                        <input type="button" value="Отмена" (click)="closeOrdersItem()" class="btn btn-warning" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
